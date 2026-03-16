@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getMediaUrl, videosApi } from '../api';
 import type { Video } from '../types';
 
 interface VideoCardProps {
@@ -6,10 +7,26 @@ interface VideoCardProps {
   isAdmin?: boolean;
   onEdit?: (video: Video) => void;
   onDelete?: (id: string) => void;
+  onLikeUpdate?: (videoId: string, count: number) => void;
 }
 
-export function VideoCard({ video, isAdmin, onEdit, onDelete }: VideoCardProps) {
+export function VideoCard({ video, isAdmin, onEdit, onDelete, onLikeUpdate }: VideoCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [liked, setLiked] = useState(() => !!sessionStorage.getItem(`videoLiked:${video.id}`));
+  const likes = video.likes ?? 0;
+
+  const handleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (liked) return;
+    try {
+      const { count } = await videosApi.like(video.id);
+      sessionStorage.setItem(`videoLiked:${video.id}`, '1');
+      setLiked(true);
+      onLikeUpdate?.(video.id, count);
+    } catch {
+      // ignore
+    }
+  };
 
   const handlePlay = () => {
     setIsPlaying(true);
@@ -25,7 +42,7 @@ export function VideoCard({ video, isAdmin, onEdit, onDelete }: VideoCardProps) 
         {isPlaying ? (
           <div className="video-player">
             <video
-              src={video.videoUrl}
+              src={getMediaUrl(video.videoUrl)}
               controls
               autoPlay
               onEnded={handleStop}
@@ -43,7 +60,7 @@ export function VideoCard({ video, isAdmin, onEdit, onDelete }: VideoCardProps) 
           </div>
         ) : (
           <>
-            <img src={video.thumbnail} alt={video.title} />
+            <img src={getMediaUrl(video.thumbnail)} alt={video.title} />
             <button className="play-icon" onClick={handlePlay}>
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
                 <circle cx="24" cy="24" r="24" fill="rgba(0,0,0,0.6)" />
@@ -61,6 +78,16 @@ export function VideoCard({ video, isAdmin, onEdit, onDelete }: VideoCardProps) 
         )}
         <span className="video-date">{video.date}</span>
       </div>
+      <button
+        className={`video-like-btn card-like-btn ${liked ? 'liked' : ''}`}
+        onClick={handleLike}
+        title="点赞"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+        <span>{likes}</span>
+      </button>
       {isAdmin && (
         <div className="admin-actions">
           <button className="admin-action-btn edit-btn" onClick={() => onEdit?.(video)} title="修改">

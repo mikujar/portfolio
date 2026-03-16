@@ -74,6 +74,10 @@ export function Videos() {
     setIsAdding(false);
   };
 
+  const handleLikeUpdate = (videoId: string, count: number) => {
+    setVideos(prev => prev.map(v => v.id === videoId ? { ...v, likes: count } : v));
+  };
+
   return (
     <div className="videos-page">
       <div className="page-header">
@@ -109,6 +113,7 @@ export function Videos() {
             isAdmin={isAdmin}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onLikeUpdate={handleLikeUpdate}
           />
         ))}
       </div>

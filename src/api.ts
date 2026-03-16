@@ -1,5 +1,13 @@
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
+/** 将相对路径转为完整 URL（前后端分离时媒体从 API 域名加载） */
+export function getMediaUrl(url: string): string {
+  if (!url) return url;
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  if (url.startsWith('/') && API_BASE) return API_BASE.replace(/\/$/, '') + url;
+  return url;
+}
+
 function getAuthHeader(): HeadersInit {
   const token = localStorage.getItem('authToken');
   return token ? { Authorization: `Bearer ${token}` } : {};
@@ -46,6 +54,7 @@ export function isLoggedIn(): boolean {
 // Videos
 export const videosApi = {
   getAll: () => request<Video[]>('/api/videos'),
+  like: (id: string) => request<{ count: number }>(`/api/videos/${id}/like`, { method: 'POST' }),
   create: (video: Omit<Video, 'id'>) => request<Video>('/api/videos', {
     method: 'POST',
     body: JSON.stringify(video),
@@ -60,6 +69,7 @@ export const videosApi = {
 // Photos
 export const photosApi = {
   getAll: () => request<Photo[]>('/api/photos'),
+  like: (id: string) => request<{ count: number }>(`/api/photos/${id}/like`, { method: 'POST' }),
   create: (photo: Omit<Photo, 'id'>) => request<Photo>('/api/photos', {
     method: 'POST',
     body: JSON.stringify(photo),
@@ -74,6 +84,7 @@ export const photosApi = {
 // Quotes
 export const quotesApi = {
   getAll: () => request<Quote[]>('/api/quotes'),
+  like: (id: string) => request<{ count: number }>(`/api/quotes/${id}/like`, { method: 'POST' }),
   create: (quote: Omit<Quote, 'id'>) => request<Quote>('/api/quotes', {
     method: 'POST',
     body: JSON.stringify(quote),
@@ -99,6 +110,23 @@ export const tasksApi = {
   delete: (id: string) => request<void>(`/api/tasks/${id}`, { method: 'DELETE' }),
 };
 
+// Messages（留言板，无需登录）
+export const messagesApi = {
+  getAll: () => request<Message[]>('/api/messages'),
+  like: (id: string) => request<{ count: number }>(`/api/messages/${id}/like`, { method: 'POST' }),
+  create: (msg: { nickname: string; content: string }) => request<Message>('/api/messages', {
+    method: 'POST',
+    body: JSON.stringify(msg),
+  }),
+  delete: (id: string) => request<void>(`/api/messages/${id}`, { method: 'DELETE' }),
+};
+
+// Visits（访问量）
+export const visitsApi = {
+  get: () => request<{ count: number }>('/api/visits'),
+  increment: () => request<{ count: number }>('/api/visits', { method: 'POST' }),
+};
+
 // Expenses
 export const expensesApi = {
   getAll: () => request<Expense[]>('/api/expenses'),
@@ -109,7 +137,7 @@ export const expensesApi = {
   delete: (id: string) => request<void>(`/api/expenses/${id}`, { method: 'DELETE' }),
 };
 
-import type { Video, Photo, Quote, Task, TasksData, Expense } from './types';
+import type { Video, Photo, Quote, Task, TasksData, Expense, Message } from './types';
 
 // File upload
 export async function uploadVideoFiles(video?: File, thumbnail?: File): Promise<{ videoUrl?: string; thumbnail?: string }> {

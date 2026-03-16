@@ -72,6 +72,10 @@ export function Photos() {
     setIsAdding(false);
   };
 
+  const handleLikeUpdate = (photoId: string, count: number) => {
+    setPhotos(prev => prev.map(p => p.id === photoId ? { ...p, likes: count } : p));
+  };
+
   return (
     <div className="photos-page">
       <div className="page-header">
@@ -99,6 +103,7 @@ export function Photos() {
             isAdmin={isAdmin}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onLikeUpdate={handleLikeUpdate}
           />
         ))}
       </div>

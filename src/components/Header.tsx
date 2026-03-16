@@ -66,6 +66,12 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
           >
             记账本
           </button>
+          <button
+            className={`nav-item ${currentPage === 'messages' ? 'active' : ''}`}
+            onClick={() => handleNavigate('messages')}
+          >
+            留言板
+          </button>
         </nav>
       </div>
     </header>

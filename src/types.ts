@@ -6,6 +6,7 @@ export interface Video {
   videoUrl: string;
   category: string;
   date: string;
+  likes?: number;
 }
 
 export interface Photo {
@@ -14,9 +15,18 @@ export interface Photo {
   description: string;
   images: string[];
   date: string;
+  likes?: number;
 }
 
-export type Page = 'home' | 'videos' | 'photos' | 'quotes' | 'tasks' | 'expenses';
+export type Page = 'home' | 'videos' | 'photos' | 'quotes' | 'tasks' | 'expenses' | 'messages';
+
+export interface Message {
+  id: string;
+  nickname: string;
+  content: string;
+  createdAt: string;
+  likes?: number;
+}
 
 export interface Quote {
   id: string;
@@ -24,6 +34,7 @@ export interface Quote {
   author?: string;
   source?: string;
   date: string;
+  likes?: number;
 }
 
 export interface Task {

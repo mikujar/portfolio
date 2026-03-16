@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { quotesApi } from '../api';
-import type { Page, Quote } from '../types';
+import { quotesApi, messagesApi } from '../api';
+import type { Page, Quote, Message } from '../types';
 
 interface HomeProps {
   onNavigate: (page: Page) => void;
@@ -9,6 +9,8 @@ interface HomeProps {
 export function Home({ onNavigate }: HomeProps) {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [randomQuote, setRandomQuote] = useState<Quote | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [randomMessage, setRandomMessage] = useState<Message | null>(null);
 
   useEffect(() => {
     quotesApi.getAll().then(data => {
@@ -18,12 +20,27 @@ export function Home({ onNavigate }: HomeProps) {
         setRandomQuote(data[index]);
       }
     });
+    messagesApi.getAll().then(data => {
+      const arr = Array.isArray(data) ? data : [];
+      setMessages(arr);
+      if (arr.length > 0) {
+        const index = Math.floor(Math.random() * arr.length);
+        setRandomMessage(arr[index]);
+      }
+    });
   }, []);
 
   const refreshQuote = () => {
     if (quotes.length > 0) {
       const index = Math.floor(Math.random() * quotes.length);
       setRandomQuote(quotes[index]);
+    }
+  };
+
+  const refreshMessage = () => {
+    if (messages.length > 0) {
+      const index = Math.floor(Math.random() * messages.length);
+      setRandomMessage(messages[index]);
     }
   };
 
@@ -77,6 +94,34 @@ export function Home({ onNavigate }: HomeProps) {
                   </svg>
                 </button>
                 <button className="more-quotes" onClick={() => onNavigate('quotes')}>
+                  更多 →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {randomMessage && (
+        <section className="random-message">
+          <h2 className="section-title">访客留言</h2>
+          <div className="random-message-card">
+            <p className="random-message-text">{randomMessage.content}</p>
+            <div className="random-message-footer">
+              <span className="random-message-nickname">—— {randomMessage.nickname}</span>
+              <div className="random-message-actions">
+                <button className="refresh-message" onClick={refreshMessage} title="换一条">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M4 4V9H9M20 20V15H15M4.5 15.5C5.5 18.5 8.5 21 12 21C16.4 21 20 17.4 20 13M19.5 8.5C18.5 5.5 15.5 3 12 3C7.6 3 4 6.6 4 11"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                <button className="more-messages" onClick={() => onNavigate('messages')}>
                   更多 →
                 </button>
               </div>

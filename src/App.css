@@ -156,6 +156,11 @@ body {
   background: #f5f5f5;
 }
 
+.footer-visits {
+  color: #bbb;
+  font-size: 0.85rem;
+}
+
 /* Home Page */
 .hero {
   text-align: center;
@@ -310,6 +315,75 @@ body {
   color: #666;
 }
 
+/* Random Message on Home */
+.random-message {
+  margin-bottom: 40px;
+}
+
+.random-message-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px 24px;
+  border: 1px solid #eee;
+}
+
+.random-message-text {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #555;
+  margin: 0 0 12px 0;
+}
+
+.random-message-footer {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.random-message-nickname {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.random-message-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.refresh-message {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #bbb;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.refresh-message:hover {
+  color: #666;
+}
+
+.more-messages {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: 0.8rem;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.more-messages:hover {
+  color: #666;
+}
+
 .about-content {
   max-width: 700px;
   margin: 0 auto;
@@ -435,6 +509,7 @@ body {
 
 /* Video Card */
 .video-card {
+  position: relative;
   background: white;
   border-radius: 12px;
   overflow: hidden;
@@ -544,8 +619,59 @@ body {
 }
 
 .video-date {
+  display: block;
+  margin-top: 8px;
   font-size: 0.8rem;
   color: #aaa;
+}
+
+.video-like-btn.card-like-btn,
+.photo-like-btn.card-like-btn,
+.quote-like-btn.card-like-btn,
+.message-like-btn.card-like-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.95);
+  color: #bbb;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  transition: color 0.2s, transform 0.2s;
+}
+
+.video-like-btn:hover,
+.photo-like-btn:hover,
+.quote-like-btn:hover,
+.message-like-btn:hover {
+  color: #e74c3c;
+}
+
+.video-like-btn.liked,
+.photo-like-btn.liked,
+.quote-like-btn.liked,
+.message-like-btn.liked {
+  color: #e74c3c;
+}
+
+.video-like-btn.liked:hover,
+.photo-like-btn.liked:hover,
+.quote-like-btn.liked:hover,
+.message-like-btn.liked:hover {
+  color: #c0392b;
+}
+
+.video-like-btn:active,
+.photo-like-btn:active,
+.quote-like-btn:active,
+.message-like-btn:active {
+  transform: scale(0.95);
 }
 
 /* Photo List */
@@ -557,12 +683,12 @@ body {
 
 /* Photo Card */
 .photo-card {
+  position: relative;
   background: white;
   border-radius: 12px;
   overflow: hidden;
   transition: transform 0.2s, box-shadow 0.2s;
   border: 1px solid #eee;
-  position: relative;
   display: flex;
   gap: 24px;
 }
@@ -698,6 +824,7 @@ body {
   color: #666;
   line-height: 1.8;
 }
+
 
 @media (max-width: 768px) {
   .photo-card {
@@ -882,6 +1009,142 @@ body {
   color: #bbb;
   text-align: right;
   display: block;
+}
+
+/* Messages Page */
+.messages-page {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.message-form {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 0 auto 24px;
+  border: 1px solid #eee;
+  max-width: 480px;
+}
+
+.message-form-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.message-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.message-input:focus {
+  outline: none;
+  border-color: #333;
+}
+
+.message-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.message-textarea:focus {
+  outline: none;
+  border-color: #333;
+}
+
+.message-submit-btn {
+  padding: 10px 20px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.message-submit-btn:hover:not(:disabled) {
+  background: #555;
+}
+
+.message-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.messages-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .messages-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .messages-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.message-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #eee;
+  position: relative;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.message-nickname {
+  font-weight: 600;
+  color: #333;
+}
+
+.message-date {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.message-content {
+  color: #555;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message-delete-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 6px;
+  border: none;
+  background: transparent;
+  color: #999;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.message-delete-btn:hover {
+  color: #e74c3c;
+  background: #fef2f2;
 }
 
 /* Admin Buttons */

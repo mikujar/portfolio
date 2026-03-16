@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getMediaUrl } from '../api';
 
 interface LightboxProps {
   images: string[];
@@ -50,7 +51,7 @@ export function Lightbox({ images, initialIndex, title, onClose }: LightboxProps
       )}
       
       <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-        <img src={images[currentIndex]} alt={`${title} ${currentIndex + 1}`} />
+        <img src={getMediaUrl(images[currentIndex])} alt={`${title} ${currentIndex + 1}`} />
       </div>
       
       {hasMultiple && (
