@@ -1,0 +1,58 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Backend (deploy separately)
+server/
+!server/package.json
+!server/package-lock.json
+!server/index.js
+!server/db.js
+
+# Large media files
+public/videos/
+public/photos/
+public/thumbnails/
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wmv
+*.flv
+*.webm
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Deploy packages
+*.zip
+server-deploy.zip
+portfolio-deploy.zip
+
+# Environment files
+.env
+.env.local
+.env.production

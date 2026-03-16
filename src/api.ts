@@ -1,0 +1,144 @@
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
+function getAuthHeader(): HeadersInit {
+  const token = localStorage.getItem('authToken');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+async function request<T>(url: string, options?: RequestInit): Promise<T> {
+  const res = await fetch(`${API_BASE}${url}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader(),
+      ...options?.headers,
+    },
+  });
+  
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ error: 'Request failed' }));
+    throw new Error(error.error || 'Request failed');
+  }
+  
+  return res.json();
+}
+
+// Auth
+export async function login(password: string): Promise<{ success: boolean; token: string }> {
+  const result = await request<{ success: boolean; token: string }>('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ password }),
+  });
+  if (result.token) {
+    localStorage.setItem('authToken', result.token);
+  }
+  return result;
+}
+
+export function logout(): void {
+  localStorage.removeItem('authToken');
+}
+
+export function isLoggedIn(): boolean {
+  return !!localStorage.getItem('authToken');
+}
+
+// Videos
+export const videosApi = {
+  getAll: () => request<Video[]>('/api/videos'),
+  create: (video: Omit<Video, 'id'>) => request<Video>('/api/videos', {
+    method: 'POST',
+    body: JSON.stringify(video),
+  }),
+  update: (id: string, video: Partial<Video>) => request<Video>(`/api/videos/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(video),
+  }),
+  delete: (id: string) => request<void>(`/api/videos/${id}`, { method: 'DELETE' }),
+};
+
+// Photos
+export const photosApi = {
+  getAll: () => request<Photo[]>('/api/photos'),
+  create: (photo: Omit<Photo, 'id'>) => request<Photo>('/api/photos', {
+    method: 'POST',
+    body: JSON.stringify(photo),
+  }),
+  update: (id: string, photo: Partial<Photo>) => request<Photo>(`/api/photos/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(photo),
+  }),
+  delete: (id: string) => request<void>(`/api/photos/${id}`, { method: 'DELETE' }),
+};
+
+// Quotes
+export const quotesApi = {
+  getAll: () => request<Quote[]>('/api/quotes'),
+  create: (quote: Omit<Quote, 'id'>) => request<Quote>('/api/quotes', {
+    method: 'POST',
+    body: JSON.stringify(quote),
+  }),
+  update: (id: string, quote: Partial<Quote>) => request<Quote>(`/api/quotes/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(quote),
+  }),
+  delete: (id: string) => request<void>(`/api/quotes/${id}`, { method: 'DELETE' }),
+};
+
+// Tasks
+export const tasksApi = {
+  getAll: () => request<TasksData>('/api/tasks'),
+  create: (task: Omit<Task, 'id' | 'position'>) => request<Task>('/api/tasks', {
+    method: 'POST',
+    body: JSON.stringify(task),
+  }),
+  updateAll: (tasks: TasksData) => request<TasksData>('/api/tasks', {
+    method: 'PUT',
+    body: JSON.stringify(tasks),
+  }),
+  delete: (id: string) => request<void>(`/api/tasks/${id}`, { method: 'DELETE' }),
+};
+
+// Expenses
+export const expensesApi = {
+  getAll: () => request<Expense[]>('/api/expenses'),
+  create: (expense: Omit<Expense, 'id' | 'createdAt'>) => request<Expense>('/api/expenses', {
+    method: 'POST',
+    body: JSON.stringify(expense),
+  }),
+  delete: (id: string) => request<void>(`/api/expenses/${id}`, { method: 'DELETE' }),
+};
+
+import type { Video, Photo, Quote, Task, TasksData, Expense } from './types';
+
+// File upload
+export async function uploadVideoFiles(video?: File, thumbnail?: File): Promise<{ videoUrl?: string; thumbnail?: string }> {
+  const formData = new FormData();
+  if (video) formData.append('video', video);
+  if (thumbnail) formData.append('thumbnail', thumbnail);
+  
+  const token = localStorage.getItem('authToken');
+  const res = await fetch(`${API_BASE}/api/upload/video`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+  
+  if (!res.ok) throw new Error('Upload failed');
+  return res.json();
+}
+
+export async function uploadPhotos(photos: File[]): Promise<{ images: string[] }> {
+  const formData = new FormData();
+  photos.forEach(photo => formData.append('photos', photo));
+  
+  const token = localStorage.getItem('authToken');
+  const res = await fetch(`${API_BASE}/api/upload/photos`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+  
+  if (!res.ok) throw new Error('Upload failed');
+  return res.json();
+}

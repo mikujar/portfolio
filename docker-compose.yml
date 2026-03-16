@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  portfolio:
+    build: .
+    container_name: portfolio-website
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-your_secure_password}
+    volumes:
+      - ./data:/app/server/data
+      - ./uploads:/app/dist/uploads
