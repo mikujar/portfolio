@@ -40,9 +40,8 @@ export function TaskCard({ task, isDragging, onDelete, onComplete, showActions =
     <div
       ref={setNodeRef}
       style={style}
-      className="task-card"
-      {...attributes}
-      {...listeners}
+      className={`task-card ${!isAdmin ? 'task-card-readonly' : ''}`}
+      {...(isAdmin ? { ...attributes, ...listeners } : {})}
     >
       <div className="task-card-content">
         <h3 className="task-title">{task.title}</h3>

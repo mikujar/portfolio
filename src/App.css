@@ -1641,6 +1641,14 @@ body {
   cursor: grabbing;
 }
 
+.task-card-readonly {
+  cursor: default;
+}
+
+.task-card-readonly:active {
+  cursor: default;
+}
+
 .task-card-content {
   flex: 1;
   min-width: 0;
