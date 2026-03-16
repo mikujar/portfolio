@@ -50,7 +50,7 @@ export function Home({ onNavigate }: HomeProps) {
         <div className="hero-content">
           <h1 className="hero-title">你好，我是陈禾佳</h1>
           <p className="hero-subtitle">
-            用镜头记录生活，用影像讲述故事
+            做一个认真而有趣的人
           </p>
           <p className="hero-description">
             这里是我的个人空间，分享我的视频创作和生活点滴。
@@ -132,14 +132,15 @@ export function Home({ onNavigate }: HomeProps) {
 
       <section className="about">
         <h2 className="section-title">关于我</h2>
-        <div className="about-content">
+        <div className="about-content about-content-left">
           <p>
-            热爱摄影和视频创作，喜欢用镜头捕捉生活中的美好瞬间。<br />
-            无论是旅途中的风景，还是日常生活的小确幸，我都想把它们记录下来。
+            我叫禾佳，目前在 University of Sydney 攻读计算机科学硕士。虽然本科是心理学专业，但我在研究生阶段逐渐转向软件开发与技术领域，希望未来成为一名全栈工程师，同时也对产品经理和产品设计充满兴趣。
           </p>
           <p>
-            这个网站是我的数字花园，收藏着我的作品和回忆。<br />
-            感谢你的来访，希望你能在这里找到一些触动心灵的内容。
+            我喜欢把技术与创意结合在一起，经常尝试开发自己的应用和项目。例如，我正在设计一个任务管理工具，以及一套基于 DIKW 模型的知识管理系统，希望用技术整理思考、记录灵感，并构建属于自己的信息体系。除了编程，我也很关注界面设计和用户体验，希望做出既好用又有美感的软件产品。
+          </p>
+          <p>
+            在学习和项目之外，我也喜欢探索生活中的各种可能性，比如做饭、旅行、滑雪、观看纪录片或剧情优秀的影视作品。我习惯独立完成任务，同时也乐于不断尝试新的想法和项目，希望一步步把自己的创意变成真实的产品。
           </p>
         </div>
       </section>

@@ -390,6 +390,10 @@ body {
   text-align: center;
 }
 
+.about-content-left {
+  text-align: left;
+}
+
 .about-content p {
   color: #666;
   margin-bottom: 16px;
